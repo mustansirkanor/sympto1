@@ -1,7 +1,10 @@
 // EnhancedDiseasePredictionDashboard.jsx
 import React, { useState } from "react";
 
-// Disease-specific configurations with unique color schemes and patterns
+// Hardcoded backend URL (Node service on Render) — no trailing slash
+const API_BASE = "https://sympto-node.onrender.com";
+
+// Disease-specific configurations
 const diseaseConfigs = {
   "brain-tumor": {
     id: "brain-tumor",
@@ -49,7 +52,7 @@ const diseaseConfigs = {
     riskFactors: ["Weakened Immune System", "Smoking", "Chronic Lung Disease", "Recent Surgery"],
     followUp: "Follow up with pulmonologist in 3-5 days for chest X-ray comparison and treatment adjustment",
   },
-  "Malarial": {
+  Malarial: {
     id: "Malarial",
     name: "Malarial Infection Detection",
     type: "image",
@@ -174,10 +177,7 @@ const CustomDropdown = ({ selectedDisease, onSelect }) => {
 
       {isOpen && (
         <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setIsOpen(false)}
-          ></div>
+          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)}></div>
           <div className="absolute z-20 w-full mt-2 bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl overflow-hidden max-h-96 overflow-y-auto">
             {Object.values(diseaseConfigs).map((disease) => (
               <button
@@ -223,7 +223,7 @@ const CustomDropdown = ({ selectedDisease, onSelect }) => {
   );
 };
 
-// Report Generation Component
+// Report Component (unchanged from your version)
 const DetailedReport = ({ disease, result, onDownload, onShare }) => {
   const config = diseaseConfigs[disease];
   const reportDate = new Date().toLocaleDateString("en-US", {
@@ -235,7 +235,6 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
 
   return (
     <div className="space-y-6">
-      {/* Report Header with Pattern */}
       <div className={`relative bg-gradient-to-br ${config.colors.primary} rounded-2xl p-8 overflow-hidden`}>
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div>
@@ -262,7 +261,6 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
         </div>
       </div>
 
-      {/* Confidence & Result Section */}
       <div className="grid md:grid-cols-3 gap-4">
         <div className={`${config.colors.secondary} border ${config.colors.border} rounded-xl p-6`}>
           <p className={`${config.colors.accent} text-sm font-medium mb-2`}>Confidence Score</p>
@@ -286,14 +284,13 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
         </div>
       </div>
 
-      {/* Diagnosis Details */}
       <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
         <h3 className="text-xl font-bold text-white mb-4 flex items-center">
           <span className={`w-1 h-6 bg-gradient-to-b ${config.colors.primary} rounded-full mr-3`}></span>
           Detailed Analysis
         </h3>
         <p className="text-neutral-300 leading-relaxed mb-4">{result.diagnosis}</p>
-        
+
         {config.type === "image" && result.imageAnalysis && (
           <div className="mt-4 p-4 bg-neutral-800/50 rounded-lg">
             <p className="text-sm font-medium text-neutral-400 mb-2">AI Vision Analysis:</p>
@@ -302,7 +299,6 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
         )}
       </div>
 
-      {/* Risk Factors */}
       <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
         <h3 className="text-xl font-bold text-white mb-4 flex items-center">
           <span className={`w-1 h-6 bg-gradient-to-b ${config.colors.primary} rounded-full mr-3`}></span>
@@ -318,7 +314,6 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
         </div>
       </div>
 
-      {/* Health Tips */}
       <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
         <h3 className="text-xl font-bold text-white mb-4 flex items-center">
           <span className={`w-1 h-6 bg-gradient-to-b ${config.colors.primary} rounded-full mr-3`}></span>
@@ -336,7 +331,6 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
         </div>
       </div>
 
-      {/* Follow-up Actions */}
       <div className={`bg-gradient-to-r ${config.colors.primary} rounded-xl p-6 relative overflow-hidden`}>
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full"></div>
@@ -347,21 +341,14 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
         </div>
       </div>
 
-      {/* Action Buttons */}
       <div className="grid md:grid-cols-3 gap-4">
-        <button
-          onClick={onDownload}
-          className={`bg-gradient-to-r ${config.colors.primary} ${config.colors.buttonHover} text-white font-semibold py-4 rounded-xl transition-all duration-200 shadow-lg flex items-center justify-center gap-2`}
-        >
+        <button onClick={onDownload} className={`bg-gradient-to-r ${config.colors.primary} ${config.colors.buttonHover} text-white font-semibold py-4 rounded-xl transition-all duration-200 shadow-lg flex items-center justify-center gap-2`}>
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           Download PDF
         </button>
-        <button
-          onClick={onShare}
-          className="bg-neutral-800 hover:bg-neutral-700 text-white font-semibold py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
-        >
+        <button onClick={onShare} className="bg-neutral-800 hover:bg-neutral-700 text-white font-semibold py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
           </svg>
@@ -375,7 +362,6 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
         </button>
       </div>
 
-      {/* Disclaimer */}
       <div className="bg-yellow-900/20 border border-yellow-700/50 rounded-xl p-4">
         <p className="text-yellow-400 text-xs leading-relaxed">
           <strong>Medical Disclaimer:</strong> This AI-generated report is for informational purposes only and should not replace professional medical advice. Always consult with qualified healthcare professionals for diagnosis and treatment decisions.
@@ -383,13 +369,10 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
       </div>
     </div>
   );
-};
+}
 
 // Main Dashboard Component
 export default function EnhancedDiseasePredictionDashboard() {
-  // Add this line at the top of your component body:
-  console.log('Backend URL:', import.meta.env.VITE_API_URL);
-  
   const [selectedDisease, setSelectedDisease] = useState("brain-tumor");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -416,112 +399,57 @@ export default function EnhancedDiseasePredictionDashboard() {
     setTextInputs({});
   };
 
-//   const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setProcessing(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setProcessing(true);
 
-//   try {
-//     // For image-based models
-//     if (config.type === "image") {
-//       const formData = new FormData();
-//       formData.append('image', imageFile);
+    try {
+      if (!imageFile) {
+        alert("Please upload an image first");
+        setProcessing(false);
+        return;
+      }
 
-//       const response = await fetch('http://localhost:5000/api/predict', {
-//         method: 'POST',
-//         body: formData,
-//       });
+      const formData = new FormData();
+      formData.append("image", imageFile);
 
-//       const result = await response.json();
-
-//       if (response.ok) {
-//         setReportData({
-//           diagnosis: result.prediction === "Parasitized" 
-//             ? "Analysis indicates presence of malaria parasites in blood cells. Immediate medical consultation is strongly recommended for treatment."
-//             : "No malaria parasites detected. Blood cells appear healthy with normal morphology.",
-//           confidence: result.confidence,
-//           riskLevel: result.risk_level,
-//           severity: Math.floor((result.confidence / 100) * 10),
-//           imageAnalysis: "The AI model analyzed cell morphology, color patterns, and structural characteristics to detect presence of Plasmodium parasites.",
-//         });
-//         setShowReport(true);
-//       } else {
-//         alert('Error: ' + (result.error || 'Failed to get prediction'));
-//       }
-//     } 
-//     // For text-based models (diabetes, heart disease)
-//     else {
-//       // You can add text-based prediction logic here later
-//       alert('Text-based prediction not yet implemented');
-//     }
-//   } catch (error) {
-//     console.error('Prediction error:', error);
-//     alert('Failed to process prediction. Please try again.');
-//   } finally {
-//     setProcessing(false);
-//   }
-// };
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setProcessing(true);
-
-  try {
-    // Validation
-    if (!imageFile) {
-      alert('Please upload an image first');
-      setProcessing(false);
-      return;
-    }
-
-    console.log('Uploading image:', imageFile.name);
-
-    // Create FormData
-    const formData = new FormData();
-    formData.append('image', imageFile);
-
-    // Send to backend
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/predict`, {
-  method: 'POST',
-  body: formData,
-});
-
-    console.log('Response status:', response.status);
-
-    const result = await response.json();
-    console.log('Response data:', result);
-
-    if (response.ok && result.success) {
-      setReportData({
-        diagnosis: result.data.prediction === "Parasitized" 
-          ? "Analysis indicates presence of malaria parasites in blood cells. Immediate medical consultation is strongly recommended for treatment."
-          : "No malaria parasites detected. Blood cells appear healthy with normal morphology.",
-        confidence: result.data.confidence,
-        riskLevel: result.data.risk_level,
-        severity: Math.floor((result.data.confidence / 100) * 10),
-        imageAnalysis: "The AI model analyzed cell morphology, color patterns, and structural characteristics to detect presence of Plasmodium parasites.",
+      const response = await fetch(`${API_BASE}/api/predict`, {
+        method: "POST",
+        body: formData,
       });
-      setShowReport(true);
-    } else {
-      alert('Error: ' + (result.error || 'Failed to get prediction'));
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setReportData({
+          diagnosis:
+            result.data.prediction === "Parasitized"
+              ? "Analysis indicates presence of malaria parasites in blood cells. Immediate medical consultation is strongly recommended for treatment."
+              : "No malaria parasites detected. Blood cells appear healthy with normal morphology.",
+          confidence: result.data.confidence,
+          riskLevel: result.data.risk_level,
+          severity: Math.floor((result.data.confidence / 100) * 10),
+          imageAnalysis:
+            "The AI model analyzed cell morphology, color patterns, and structural characteristics to detect presence of Plasmodium parasites.",
+        });
+        setShowReport(true);
+      } else {
+        alert("Error: " + (result.error || "Failed to get prediction"));
+      }
+    } catch (error) {
+      console.error("Prediction error:", error);
+      alert("Failed to connect to backend. Make sure both servers are running.");
+    } finally {
+      setProcessing(false);
     }
-  } catch (error) {
-    console.error('Prediction error:', error);
-    alert('Failed to connect to backend. Make sure both servers are running.');
-  } finally {
-    setProcessing(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white mt-10">
-      {/* Animated Background Pattern */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-5">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500 rounded-full filter blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
       </div>
-
-      {/* Header */}
-      
 
       <div className="relative max-w-5xl mx-auto px-6 py-10">
         {!showReport ? (
@@ -535,9 +463,7 @@ const handleSubmit = async (e) => {
               </p>
             </div>
 
-            {/* Input Form with Dropdown */}
             <form onSubmit={handleSubmit} className="bg-neutral-900 border border-neutral-800 rounded-2xl p-8">
-              {/* Custom Dropdown */}
               <CustomDropdown selectedDisease={selectedDisease} onSelect={handleDiseaseChange} />
 
               <div className="mt-8">
@@ -553,18 +479,9 @@ const handleSubmit = async (e) => {
 
                 {config.type === "image" ? (
                   <div className="space-y-4">
-                    <label className="block text-sm font-medium mb-3 text-neutral-300">
-                      Upload Medical Image for Analysis
-                    </label>
+                    <label className="block text-sm font-medium mb-3 text-neutral-300">Upload Medical Image for Analysis</label>
                     <div className="relative">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="hidden"
-                        id="file-upload"
-                        required
-                      />
+                      <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="file-upload" required />
                       <label
                         htmlFor="file-upload"
                         className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed ${config.colors.border} rounded-2xl cursor-pointer ${config.colors.secondary} hover:bg-neutral-800/50 transition-all duration-300`}
@@ -624,9 +541,7 @@ const handleSubmit = async (e) => {
                   type="submit"
                   disabled={processing}
                   className={`w-full mt-8 py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 transform hover:scale-105 ${
-                    processing
-                      ? "bg-neutral-700 cursor-not-allowed"
-                      : `bg-gradient-to-r ${config.colors.primary} ${config.colors.buttonHover} shadow-2xl`
+                    processing ? "bg-neutral-700 cursor-not-allowed" : `bg-gradient-to-r ${config.colors.primary} ${config.colors.buttonHover} shadow-2xl`
                   }`}
                 >
                   {processing ? (
@@ -641,34 +556,4 @@ const handleSubmit = async (e) => {
                     <span className="flex items-center justify-center gap-2">
                       Generate Diagnostic Report
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </span>
-                  )}
-                </button>
-              </div>
-            </form>
-          </>
-        ) : (
-          <div>
-            <button
-              onClick={() => setShowReport(false)}
-              className="mb-6 flex items-center gap-2 text-neutral-400 hover:text-white transition"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to Analysis
-            </button>
-            <DetailedReport
-              disease={selectedDisease}
-              result={reportData}
-              onDownload={() => console.log("Downloading PDF report...")}
-              onShare={() => console.log("Sharing with doctor...")}
-            />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0
