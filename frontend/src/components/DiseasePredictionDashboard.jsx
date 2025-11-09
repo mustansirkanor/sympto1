@@ -387,6 +387,9 @@ const DetailedReport = ({ disease, result, onDownload, onShare }) => {
 
 // Main Dashboard Component
 export default function EnhancedDiseasePredictionDashboard() {
+  // Add this line at the top of your component body:
+  console.log('Backend URL:', import.meta.env.VITE_API_URL);
+  
   const [selectedDisease, setSelectedDisease] = useState("brain-tumor");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
